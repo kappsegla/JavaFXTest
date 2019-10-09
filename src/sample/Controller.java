@@ -81,7 +81,9 @@ public class Controller {
                 }
             }
         }
+        System.out.println(model.getShapes().size());
         drawShapesOnCanvas();
+
     }
 
     public void canvasOnMouseClicked(MouseEvent event) {
@@ -90,12 +92,20 @@ public class Controller {
 
         if (event.getButton() == MouseButton.SECONDARY) {
             Optional<Drawable> shape = model.findIntersection(x, y);
-            if (shape.isPresent())
-                unDoRedo.changeColorCommand(shape.get(), Color.GREEN);
+            if (shape.isPresent()) {
+                if (event.isControlDown()) {
+                    unDoRedo.insertInUnDoRedoForAddDecorator(new StrokeDecorator(shape.get(), Color.BLACK, 5.0));
+                } else if (event.isAltDown()) {
+                    unDoRedo.insertInUnDoRedoForAddDecorator(new ResizeDecorator(shape.get(),2.0, 2.0));
+                } else {
+                    if (shape.get().getPaint() != Color.GREEN)
+                        unDoRedo.insertInUnDoRedoChangeColor(shape.get(), Color.GREEN);
+                }
+            }
         } else if (event.getButton() == MouseButton.PRIMARY) {
             if (event.isControlDown())
                 unDoRedo.insertInUnDoRedoForInsert(new StrokeDecorator(ShapeFactory.createShape(new ShapeProperties("circle", x, y, Color.RED)), Color.BLACK, 5.0));
-            else if( event.isAltDown())
+            else if (event.isAltDown())
                 unDoRedo.insertInUnDoRedoForInsert(new ResizeDecorator(ShapeFactory.createShape(new ShapeProperties("circle", x, y, Color.RED)), 2.0, 2.0));
             else
                 unDoRedo.insertInUnDoRedoForInsert(ShapeFactory.createShape(new ShapeProperties("circle", x, y, Color.RED)));
@@ -108,14 +118,10 @@ public class Controller {
 
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        gc.setFill(Color.DARKBLUE);
-        //gc.setFill(new ImagePattern(Image));
 
         //Draw all shapes
         for (Drawable shape : model.getShapes()) {
             shape.draw(gc, false);
         }
-
-        //Platform.runLater(java.lang.Runnable runnable)
     }
 }

@@ -1,9 +1,7 @@
 package sample.operations;
 
 import javafx.scene.paint.Color;
-import sample.shapes.Drawable;
-import sample.shapes.ResizeDecorator;
-import sample.shapes.Shape;
+import sample.shapes.*;
 
 import java.util.List;
 import java.util.Stack;
@@ -38,28 +36,27 @@ public class UnDoRedo {
         }
     }
 
-//    public void insertInUnDoRedoForInsert(Drawable shape) {
-//        Command cmd = new InsertCommand(shape, shapes);
-//        cmd.execute();
-//        undoCommands.push(cmd);
-//        redoCommands.clear();
-//    }
-    public void insertInUnDoRedoForInsert(Drawable shape) {
-        Tuple tuple = new Tuple(()-> shapes.add(shape), ()-> shapes.remove(shape));
+    public void insertInUnDoRedoForInsert(final Drawable shape) {
+        Tuple tuple = new Tuple(() -> shapes.add(shape), () -> shapes.remove(shape));
         tuple.doIt.execute();
         undoCommands.push(tuple);
         redoCommands.clear();
     }
 
-    public void changeColorCommand(Drawable shape, Color color) {
+    public void insertInUnDoRedoChangeColor(final Drawable shape, final Color newColor) {
         var oldColor = shape.getPaint();
-        Tuple tuple = new Tuple(()-> shape.setPaint(color), ()-> shape.setPaint(oldColor));
+        Tuple tuple = new Tuple(() -> shape.setPaint(newColor), () -> shape.setPaint(oldColor));
         tuple.doIt.execute();
         undoCommands.push(tuple);
         redoCommands.clear();
-//        Command cmd = new ChangeColorCommand(shape, color);
-//        cmd.execute();
-//        undoCommands.push(cmd);
-//        redoCommands.clear();
+    }
+
+    public void insertInUnDoRedoForAddDecorator(final Decorator decorator) {
+        var shape = decorator.getDrawable();
+        Tuple tuple = new Tuple(() -> shapes.replaceAll(drawable -> drawable.equals(shape) ? decorator : drawable),
+                                () -> shapes.replaceAll(drawable -> drawable.equals(decorator) ? shape : drawable));
+        tuple.doIt.execute();
+        undoCommands.push(tuple);
+        redoCommands.clear();
     }
 }

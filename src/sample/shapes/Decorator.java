@@ -12,6 +12,10 @@ public class Decorator implements Drawable {
         this.drawable = drawable;
     }
 
+    public Drawable getDrawable() {
+        return drawable;
+    }
+
     @Override
     public void setXpos(double xpos) {
         drawable.setXpos(xpos);
