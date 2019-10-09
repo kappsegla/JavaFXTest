@@ -53,10 +53,17 @@ public class UnDoRedo {
 
     public void insertInUnDoRedoForAddDecorator(final Decorator decorator) {
         var shape = decorator.getDrawable();
-        Tuple tuple = new Tuple(() -> shapes.replaceAll(drawable -> drawable.equals(shape) ? decorator : drawable),
-                                () -> shapes.replaceAll(drawable -> drawable.equals(decorator) ? shape : drawable));
+        Tuple tuple = new Tuple(
+                () -> replaceInList(shapes, shape, decorator),
+                () -> replaceInList(shapes, decorator, shape));
         tuple.doIt.execute();
         undoCommands.push(tuple);
         redoCommands.clear();
+    }
+
+    private <T> void replaceInList(List<T> list, T replace, T with) {
+        int index = list.indexOf(replace);
+        list.set(index, with);
+        //shapes.replaceAll(drawable -> drawable.equals(shape) ? decorator : drawable)
     }
 }

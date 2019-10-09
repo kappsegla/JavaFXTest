@@ -31,8 +31,8 @@ public class Controller {
         unDoRedo = new UnDoRedo(model.getShapes());
 
         //Call draw on canvas when width or height changes
-        canvas.widthProperty().addListener(observable -> drawShapesOnCanvas());
-        canvas.heightProperty().addListener(observable -> drawShapesOnCanvas());
+        canvas.widthProperty().addListener(observable -> drawShapes());
+        canvas.heightProperty().addListener(observable -> drawShapes());
 
         //Register for change events on shapelist
         model.getShapes().addListener(this::onListOfDrawablesChanged);
@@ -82,7 +82,7 @@ public class Controller {
             }
         }
         System.out.println(model.getShapes().size());
-        drawShapesOnCanvas();
+        drawShapes();
 
     }
 
@@ -113,7 +113,7 @@ public class Controller {
     }
 
 
-    public void drawShapesOnCanvas() {
+    public void drawShapes() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         gc.setFill(Color.WHITE);
