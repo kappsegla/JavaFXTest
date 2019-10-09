@@ -31,11 +31,11 @@ public class Controller {
         unDoRedo = new UnDoRedo(model.getShapes());
 
         //Call draw on canvas when width or height changes
-        canvas.widthProperty().addListener(observable -> drawShapes());
-        canvas.heightProperty().addListener(observable -> drawShapes());
+        canvas.widthProperty().addListener(observable -> drawShapesOnCanvas());
+        canvas.heightProperty().addListener(observable -> drawShapesOnCanvas());
 
         //Register for change events on shapelist
-        model.getShapes().addListener(this::onChanged);
+        model.getShapes().addListener(this::onListOfDrawablesChanged);
     }
 
     //Do stuff here that requires that we have a scene.
@@ -62,7 +62,7 @@ public class Controller {
     }
 
     //Changed listener method for shapes list
-    public void onChanged(ListChangeListener.Change<? extends Drawable> c) {
+    public void onListOfDrawablesChanged(ListChangeListener.Change<? extends Drawable> c) {
         while (c.next()) {
             if (c.wasPermutated()) {
                 for (int i = c.getFrom(); i < c.getTo(); ++i) {
@@ -81,11 +81,10 @@ public class Controller {
                 }
             }
         }
-        drawShapes();
+        drawShapesOnCanvas();
     }
 
-    @FXML
-    public void handleOnMouseClicked(MouseEvent event) {
+    public void canvasOnMouseClicked(MouseEvent event) {
         x = event.getX();
         y = event.getY();
 
@@ -104,7 +103,7 @@ public class Controller {
     }
 
 
-    public void drawShapes() {
+    public void drawShapesOnCanvas() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         gc.setFill(Color.WHITE);

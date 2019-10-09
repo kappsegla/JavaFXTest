@@ -52,6 +52,11 @@ public class UnDoRedo {
     }
 
     public void changeColorCommand(Drawable shape, Color color) {
+        var oldColor = shape.getPaint();
+        Tuple tuple = new Tuple(()-> shape.setPaint(color), ()-> shape.setPaint(oldColor));
+        tuple.doIt.execute();
+        undoCommands.push(tuple);
+        redoCommands.clear();
 //        Command cmd = new ChangeColorCommand(shape, color);
 //        cmd.execute();
 //        undoCommands.push(cmd);
