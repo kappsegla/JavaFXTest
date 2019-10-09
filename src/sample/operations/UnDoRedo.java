@@ -64,6 +64,5 @@ public class UnDoRedo {
     private <T> void replaceInList(List<T> list, T replace, T with) {
         int index = list.indexOf(replace);
         list.set(index, with);
-        //shapes.replaceAll(drawable -> drawable.equals(shape) ? decorator : drawable)
     }
 }

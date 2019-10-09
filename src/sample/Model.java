@@ -37,6 +37,8 @@ public class Model {
     }
 
     public Optional<Drawable> findIntersection(double x, double y) {
-        return shapes.stream().filter(s -> s.intersects(x,y)).findFirst();
+        //https://stackoverflow.com/questions/21426843/get-last-element-of-stream-list-in-a-one-liner
+        return shapes.stream().filter(s -> s.intersects(x,y)).reduce((first, second) -> second);
+        //return shapes.stream().filter(s -> s.intersects(x,y)).findFirst();
     }
 }

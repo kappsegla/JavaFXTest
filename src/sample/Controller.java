@@ -12,6 +12,8 @@ import sample.shapes.*;
 
 import java.util.Optional;
 
+import static sample.shapes.ShapeType.CIRCLE;
+
 public class Controller {
     @FXML
     public Canvas canvas;
@@ -91,6 +93,7 @@ public class Controller {
         y = event.getY();
 
         if (event.getButton() == MouseButton.SECONDARY) {
+            //Selection and change mode
             Optional<Drawable> shape = model.findIntersection(x, y);
             if (shape.isPresent()) {
                 if (event.isControlDown()) {
@@ -103,12 +106,13 @@ public class Controller {
                 }
             }
         } else if (event.getButton() == MouseButton.PRIMARY) {
+            //Create new Drawables
             if (event.isControlDown())
-                unDoRedo.insertInUnDoRedoForInsert(new StrokeDecorator(ShapeFactory.createShape(new ShapeProperties("circle", x, y, Color.RED)), Color.BLACK, 5.0));
+                unDoRedo.insertInUnDoRedoForInsert(new StrokeDecorator(ShapeFactory.createShape(new ShapeProperties(CIRCLE, x, y, Color.RED)), Color.BLACK, 5.0));
             else if (event.isAltDown())
-                unDoRedo.insertInUnDoRedoForInsert(new ResizeDecorator(ShapeFactory.createShape(new ShapeProperties("circle", x, y, Color.RED)), 2.0, 2.0));
+                unDoRedo.insertInUnDoRedoForInsert(new ResizeDecorator(ShapeFactory.createShape(new ShapeProperties(CIRCLE, x, y, Color.RED)), 2.0, 2.0));
             else
-                unDoRedo.insertInUnDoRedoForInsert(ShapeFactory.createShape(new ShapeProperties("circle", x, y, Color.RED)));
+                unDoRedo.insertInUnDoRedoForInsert(ShapeFactory.createShape(new ShapeProperties(CIRCLE, x, y, Color.RED)));
         }
     }
 

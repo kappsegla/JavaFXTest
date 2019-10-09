@@ -19,7 +19,7 @@ public class ResizeDecorator extends Decorator {
     public void draw(GraphicsContext gc, boolean stroke) {
         gc.save();
         //Translate origin to our point
-        gc.translate(-getXpos(),-getYpos());
+        gc.translate(-getXpos(), -getYpos());
         //Scale around origin
         gc.scale(scaleX, scaleY);
         super.draw(gc, stroke);
@@ -28,7 +28,10 @@ public class ResizeDecorator extends Decorator {
 
     @Override
     public boolean intersects(double x, double y) {
-        //TODO: must change the intersection code to take into account that we are using transformation'
-        return super.intersects(x, y);
+        //Change the intersection code to take into account that we are using transformation
+        double scaledX = getXpos() + (x - getXpos()) / scaleX;
+        double scaledY = getYpos() + (y - getYpos()) / scaleY;
+
+        return super.intersects(scaledX, scaledY);
     }
 }
