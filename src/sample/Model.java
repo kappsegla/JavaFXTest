@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.util.Callback;
 import sample.shapes.Drawable;
 import sample.shapes.Shape;
+import sample.shapes.ShapeType;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class Model {
 
     final ObservableList<Drawable> shapes;
+    private ShapeType shapeType = ShapeType.CIRCLE;
 
     public Model(){
         //https://coderanch.com/t/666722/java/Notify-ObservableList-Listeners-Change-Elements
@@ -40,5 +42,13 @@ public class Model {
         //https://stackoverflow.com/questions/21426843/get-last-element-of-stream-list-in-a-one-liner
         return shapes.stream().filter(s -> s.intersects(x,y)).reduce((first, second) -> second);
         //return shapes.stream().filter(s -> s.intersects(x,y)).findFirst();
+    }
+
+    public void setMode(ShapeType type) {
+        this.shapeType = type;
+    }
+
+    public ShapeType getShapeType() {
+        return shapeType;
     }
 }

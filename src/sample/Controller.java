@@ -11,8 +11,9 @@ import sample.operations.UnDoRedo;
 import sample.shapes.*;
 
 import java.util.Optional;
+import java.util.Random;
 
-import static sample.shapes.ShapeType.CIRCLE;
+import static sample.shapes.ShapeType.*;
 
 public class Controller {
     @FXML
@@ -58,6 +59,15 @@ public class Controller {
                         } else if (ctrlShiftZ.match(ke)) {
                             unDoRedo.redo(1);
                             ke.consume();
+                        } else if (ke.getCode().getCode() == '1') {
+                            model.setMode(CIRCLE);
+                            drawShapes();
+                        } else if (ke.getCode().getCode() == '2') {
+                            model.setMode(RECT);
+                            drawShapes();
+                        } else if (ke.getCode().getCode() == '3') {
+                            model.setMode(TRIANGLE);
+                            drawShapes();
                         }
                     }
                 });
@@ -99,21 +109,28 @@ public class Controller {
                 if (event.isControlDown()) {
                     unDoRedo.insertInUnDoRedoForAddDecorator(new StrokeDecorator(shape.get(), Color.BLACK, 5.0));
                 } else if (event.isAltDown()) {
-                    unDoRedo.insertInUnDoRedoForAddDecorator(new ResizeDecorator(shape.get(),2.0, 2.0));
-                } else {
-                    if (shape.get().getPaint() != Color.GREEN)
-                        unDoRedo.insertInUnDoRedoChangeColor(shape.get(), Color.GREEN);
+                    unDoRedo.insertInUnDoRedoForAddDecorator(new ResizeDecorator(shape.get(), 2.0, 2.0));
+                } else if (event.isShiftDown()) {
+                    unDoRedo.insertInUnDoRedoChangeColor(shape.get(), getRandomColor());
                 }
             }
         } else if (event.getButton() == MouseButton.PRIMARY) {
             //Create new Drawables
             if (event.isControlDown())
-                unDoRedo.insertInUnDoRedoForInsert(new StrokeDecorator(ShapeFactory.createShape(new ShapeProperties(CIRCLE, x, y, Color.RED)), Color.BLACK, 5.0));
+                unDoRedo.insertInUnDoRedoForInsert(new StrokeDecorator(ShapeFactory.createShape(new ShapeProperties(model.getShapeType(), x, y, Color.RED)), Color.BLACK, 5.0));
             else if (event.isAltDown())
-                unDoRedo.insertInUnDoRedoForInsert(new ResizeDecorator(ShapeFactory.createShape(new ShapeProperties(CIRCLE, x, y, Color.RED)), 2.0, 2.0));
-            else
-                unDoRedo.insertInUnDoRedoForInsert(ShapeFactory.createShape(new ShapeProperties(CIRCLE, x, y, Color.RED)));
+                unDoRedo.insertInUnDoRedoForInsert(new ResizeDecorator(ShapeFactory.createShape(new ShapeProperties(model.getShapeType(), x, y, Color.RED)), 2.0, 2.0));
+            else {
+                unDoRedo.insertInUnDoRedoForInsert(ShapeFactory.createShape(new ShapeProperties(model.getShapeType(), x, y, Color.RED)));
+            }
         }
+    }
+
+    private Color getRandomColor() {
+        int r = (int) (Math.random() * 256);
+        int g = (int) (Math.random() * 256);
+        int b = (int) (Math.random() * 256);
+        return Color.rgb(r, g, b);
     }
 
 
@@ -127,5 +144,12 @@ public class Controller {
         for (Drawable shape : model.getShapes()) {
             shape.draw(gc, false);
         }
+        //Draw help text on top of everything
+        gc.setFill(Color.DARKBLUE);
+        gc.fillText("LEFT Mouse - New Shape RIGHT Mouse - Select\n" +
+                "1 - Circle, 2 - Rectangle, 3 - Triangle\n" +
+                "Ctrl - Border, Alt - Increase size, Shift - Change color", 10, 10);
+        gc.fillText("Type: " + model.getShapeType(), 10, canvas.getHeight() - 10);
+
     }
 }
