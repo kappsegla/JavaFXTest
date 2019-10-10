@@ -1,7 +1,6 @@
 package sample.shapes;
 
-import static sample.shapes.ShapeType.CIRCLE;
-import static sample.shapes.ShapeType.RECT;
+import static sample.shapes.ShapeType.*;
 
 public class ShapeFactory {
 
@@ -13,6 +12,10 @@ public class ShapeFactory {
         if( properties.type == RECT)
         {
             return new Rectangle(properties.x,properties.y,10,10,properties.paint);
+        }
+        if( properties.type == TRIANGLE)
+        {
+            return new Triangle(properties.x,properties.y,properties.paint);
         }
         return null;
     }
