@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JavaFXTest:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JavaFXTest_jar</output-path>
+    <root id="archive" name="JavaFXTest.jar">
+      <element id="module-output" name="JavaFXTest" />
+      <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-13/lib/javafx-swt.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-13/lib/javafx.base.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-13/lib/javafx.controls.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-13/lib/javafx.fxml.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-13/lib/javafx.graphics.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-13/lib/javafx.media.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-13/lib/javafx.swing.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-13/lib/javafx.web.jar" path-in-jar="/" />
+      <element id="dir-copy" path="C:/Program Files/Java/javafx-sdk-13/bin" />
+    </root>
+  </artifact>
+</component>

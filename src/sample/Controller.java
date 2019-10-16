@@ -26,13 +26,13 @@ public class Controller {
     Model model;
     UnDoRedo unDoRedo;
 
-    public Controller() {
-
+    public Controller(Model model) {
+        this.model = model;
     }
 
     public void initialize() {
 
-        model = new Model();
+       // model = new Model();
         unDoRedo = new UnDoRedo(model.getShapes());
 
         //Call draw on canvas when width or height changes
@@ -62,22 +62,22 @@ public class Controller {
                             unDoRedo.redo(1);
                             ke.consume();
                         }
-//                         else if (ke.getCode().getCode() == '1') {
-//                            model.setMode(CIRCLE);
-//                            drawShapes();
-//                        } else if (ke.getCode().getCode() == '2') {
-//                            model.setMode(RECT);
-//                            drawShapes();
-//                        } else if (ke.getCode().getCode() == '3') {
-//                            model.setMode(TRIANGLE);
-//                            drawShapes();
-//                        }
-                        //Switch expressions
-                        switch (ke.getCode().getCode()) {
-                            case '1' -> model.setMode(CIRCLE);
-                            case '2' -> model.setMode(RECT);
-                            case '3' -> model.setMode(TRIANGLE);
+                         else if (ke.getCode().getCode() == '1') {
+                            model.setMode(CIRCLE);
+                            drawShapes();
+                        } else if (ke.getCode().getCode() == '2') {
+                            model.setMode(RECT);
+                            drawShapes();
+                        } else if (ke.getCode().getCode() == '3') {
+                            model.setMode(TRIANGLE);
+                            drawShapes();
                         }
+//                        //Switch expressions
+//                        switch (ke.getCode().getCode()) {
+//                            case '1' -> model.setMode(CIRCLE);
+//                            case '2' -> model.setMode(RECT);
+//                            case '3' -> model.setMode(TRIANGLE);
+//                        }
                         drawShapes();
                     }
                 });
