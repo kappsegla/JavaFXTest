@@ -1,7 +1,8 @@
-package sample.shapes;
+package sample.shapes.decorators;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
+import sample.shapes.Drawable;
 
 public class StrokeDecorator extends Decorator {
 

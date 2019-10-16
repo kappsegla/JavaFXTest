@@ -1,8 +1,9 @@
-package sample.shapes;
+package sample.shapes.decorators;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Scale;
+import sample.shapes.Drawable;
 
 public class ResizeDecorator extends Decorator {
 
@@ -18,10 +19,7 @@ public class ResizeDecorator extends Decorator {
     @Override
     public void draw(GraphicsContext gc, boolean stroke) {
         gc.save();
-        //Translate origin to our point
-        gc.translate(-getXpos(), -getYpos());
-        //Scale around origin
-        gc.scale(scaleX, scaleY);
+        gc.transform(new Affine(new Scale(scaleX, scaleY, getXpos(), getYpos())));
         super.draw(gc, stroke);
         gc.restore();
     }

@@ -9,9 +9,11 @@ import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import sample.operations.UnDoRedo;
 import sample.shapes.*;
+import sample.shapes.decorators.ResizeDecorator;
+import sample.shapes.decorators.RotateDecorator;
+import sample.shapes.decorators.StrokeDecorator;
 
 import java.util.Optional;
-import java.util.Random;
 
 import static sample.shapes.ShapeType.*;
 
@@ -59,16 +61,24 @@ public class Controller {
                         } else if (ctrlShiftZ.match(ke)) {
                             unDoRedo.redo(1);
                             ke.consume();
-                        } else if (ke.getCode().getCode() == '1') {
-                            model.setMode(CIRCLE);
-                            drawShapes();
-                        } else if (ke.getCode().getCode() == '2') {
-                            model.setMode(RECT);
-                            drawShapes();
-                        } else if (ke.getCode().getCode() == '3') {
-                            model.setMode(TRIANGLE);
-                            drawShapes();
                         }
+//                         else if (ke.getCode().getCode() == '1') {
+//                            model.setMode(CIRCLE);
+//                            drawShapes();
+//                        } else if (ke.getCode().getCode() == '2') {
+//                            model.setMode(RECT);
+//                            drawShapes();
+//                        } else if (ke.getCode().getCode() == '3') {
+//                            model.setMode(TRIANGLE);
+//                            drawShapes();
+//                        }
+                        //Switch expressions
+                        switch (ke.getCode().getCode()) {
+                            case '1' -> model.setMode(CIRCLE);
+                            case '2' -> model.setMode(RECT);
+                            case '3' -> model.setMode(TRIANGLE);
+                        }
+                        drawShapes();
                     }
                 });
     }
@@ -107,12 +117,14 @@ public class Controller {
             Optional<Drawable> shape = model.findIntersection(x, y);
             if (shape.isPresent()) {
                 if (event.isControlDown()) {
-                    unDoRedo.insertInUnDoRedoForAddDecorator(new StrokeDecorator(shape.get(), Color.BLACK, 5.0));
+                    //unDoRedo.insertInUnDoRedoForAddDecorator(new StrokeDecorator(shape.get(), Color.BLACK, 5.0));
+                    unDoRedo.insertInUnDoRedoForAddDecorator(new RotateDecorator(shape.get(), 10.0));
                 } else if (event.isAltDown()) {
                     unDoRedo.insertInUnDoRedoForAddDecorator(new ResizeDecorator(shape.get(), 2.0, 2.0));
                 } else if (event.isShiftDown()) {
                     unDoRedo.insertInUnDoRedoChangeColor(shape.get(), getRandomColor());
                 }
+
             }
         } else if (event.getButton() == MouseButton.PRIMARY) {
             //Create new Drawables

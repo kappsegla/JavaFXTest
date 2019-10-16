@@ -6,6 +6,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Paint;
 
+import java.io.Serializable;
+
 public abstract class Shape implements Drawable {
 
     private DoubleProperty xpos = new SimpleDoubleProperty();

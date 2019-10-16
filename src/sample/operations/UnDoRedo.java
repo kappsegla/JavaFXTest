@@ -2,6 +2,7 @@ package sample.operations;
 
 import javafx.scene.paint.Color;
 import sample.shapes.*;
+import sample.shapes.decorators.Decorator;
 
 import java.util.List;
 import java.util.Stack;

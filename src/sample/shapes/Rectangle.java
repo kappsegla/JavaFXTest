@@ -32,6 +32,7 @@ public class Rectangle extends Shape {
 
     @Override
     public void draw(GraphicsContext gc, boolean stroke) {
+        //Todo: Center rectangle around mousepoint
         if (stroke)
             gc.strokeRect(getXpos(), getYpos(), getWidth(), getHeight());
         else {
@@ -42,6 +43,7 @@ public class Rectangle extends Shape {
 
     @Override
     public boolean intersects(double x, double y) {
+        //Todo: Center rectangle around mousepoint
         if (x > getXpos() && x < getXpos() + width &&
                 y > getYpos() && y < getYpos() + height)
             return true;

@@ -1,11 +1,12 @@
-package sample.shapes;
+package sample.shapes.decorators;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
+import sample.shapes.Drawable;
 
-public class Decorator implements Drawable {
+public abstract class Decorator implements Drawable {
     private final Drawable drawable;
 
     public Decorator(Drawable drawable) {
