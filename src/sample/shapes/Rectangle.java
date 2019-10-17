@@ -32,22 +32,24 @@ public class Rectangle extends Shape {
 
     @Override
     public void draw(GraphicsContext gc, boolean stroke) {
-        //Todo: Center rectangle around mousepoint
+        double hWidth = getWidth() / 2.0;
+        double hHeight = getHeight() / 2.0;
+
         if (stroke)
-            gc.strokeRect(getXpos(), getYpos(), getWidth(), getHeight());
+            gc.strokeRect(getXpos() - hWidth, getYpos() - hHeight, getWidth(), getHeight());
         else {
             gc.setFill(getPaint());
-            gc.fillRect(getXpos(), getYpos(), getWidth(), getHeight());
+            gc.fillRect(getXpos() - hWidth, getYpos() - hHeight, getWidth(), getHeight());
         }
     }
 
     @Override
     public boolean intersects(double x, double y) {
-        //Todo: Center rectangle around mousepoint
-        if (x > getXpos() && x < getXpos() + width &&
-                y > getYpos() && y < getYpos() + height)
+        double hWidth = getWidth() / 2.0;
+        double hHeight = getHeight() / 2.0;
+        if (x > getXpos() - hWidth && x < getXpos() - hWidth + width &&
+                y > getYpos() - hHeight && y < getYpos() - hHeight + height)
             return true;
-
         return false;
     }
 }
