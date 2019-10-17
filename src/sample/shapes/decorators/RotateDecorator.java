@@ -25,8 +25,9 @@ public class RotateDecorator extends Decorator{
 
     @Override
     public boolean intersects(double x, double y) {
-        //Todo:Fix intersects for RotateDecorator
         //Rotate mousecoords and do an normal intersect
-        return super.intersects(x, y);
+        Rotate rotate = new Rotate(angle, getXpos(), getYpos());
+        var p = rotate.transform(x,y);
+        return super.intersects(p.getX(), p.getY());
     }
 }
