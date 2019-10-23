@@ -27,7 +27,7 @@ public class SocketClient {
     Socket socket;
     PrintWriter writer;
     BufferedReader reader;
-    ExecutorService threadPool;
+    public ExecutorService threadPool;
 
     public SocketClient() {
         threadPool = Executors.newFixedThreadPool(2);
@@ -120,10 +120,19 @@ public class SocketClient {
                 if (listener != null)
                     listener.accept(message);
                 });
-            } catch (IOException e) {
+            }catch (IOException e) {
                 setConnected(false);
                 return;
             }
+        }
+    }
+
+    public void close() {
+        try {
+            if( socket != null)
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

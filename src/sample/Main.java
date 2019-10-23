@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     //--module-path "C:\Program Files\Java\javafx-sdk-13\lib" --add-modules javafx.controls,javafx.fxml
-    static Controller myController;
+    Controller controller;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -23,7 +23,7 @@ public class Main extends Application {
         loader.setControllerFactory(param -> new Controller(model));
         Parent root = loader.load();
 
-        Controller controller = loader.getController();
+        controller = loader.getController();
         controller.setStage(primaryStage);
 
         primaryStage.setTitle("MyPaint");
@@ -36,6 +36,14 @@ public class Main extends Application {
 
         primaryStage.sizeToScene();
         primaryStage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        //We have to shutdown our network connections and threadpool before JVM can close down.
+        controller.socketClient.close();
+        controller.socketClient.threadPool.shutdown();
     }
 
     public static void main(String[] args) {

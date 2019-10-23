@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -111,9 +112,12 @@ public class Controller {
     public void saveToFile() {
         Dialogs.showSaveAsFileDialog(stage).ifPresent(path -> {
             try (FileWriter fileWriter = new FileWriter(path)) {
+                fileWriter.write("<?xml version=\"1.0\" standalone=\"no\"?>\n" +
+                        "<svg width=\""+canvas.getWidth()+"\" height=\""+canvas.getHeight()+"\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n");
                 for (Drawable shape : model.getShapes()) {
                     fileWriter.write(shape.toSvg());
                 }
+                fileWriter.write("</svg>");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -160,7 +164,6 @@ public class Controller {
                 } else if (event.isShiftDown()) {
                     unDoRedo.insertInUnDoRedoChangeColor(shape.get(), getRandomColor());
                 }
-
             }
         } else if (event.getButton() == MouseButton.PRIMARY) {
             //Create new Drawables
@@ -204,6 +207,5 @@ public class Controller {
                 "1 - Circle, 2 - Rectangle, 3 - Triangle\n" +
                 "Ctrl - Border, Alt - Increase size, Shift - Change color", 10, 10);
         gc.fillText("Type: " + model.getShapeType(), 10, canvas.getHeight() - 10);
-
     }
 }

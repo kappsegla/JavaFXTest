@@ -15,11 +15,6 @@ public class Triangle extends Shape {
     }
 
     @Override
-    public Shape deepCopy() {
-        return new Triangle(getXpos(),getYpos(),getPaint());
-    }
-
-    @Override
     public void draw(GraphicsContext gc, boolean stroke) {
         if (stroke)
             gc.strokePolygon(xPoints, yPoints, 3);
