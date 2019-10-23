@@ -50,7 +50,7 @@ public class SocketClient {
     //</editor-fold>
 
     public void connect(String host, Integer port) {
-        if( isConnected() && socket != null ) {
+        if (isConnected() && socket != null) {
             try {
                 socket.close();
                 socket = null;
@@ -97,7 +97,7 @@ public class SocketClient {
 
     public void sendMessage(String message) {
         //Send message to server
-        if (connected.get())
+        if (isConnected())
             threadPool.submit(() -> writer.println(message));
     }
 
@@ -106,6 +106,7 @@ public class SocketClient {
     /**
      * Sets a receive listener that will be called every time a new message is received.
      * Safe to use from JavaFX because the code will be wrappen in a Platform.runLater(() -> {} );
+     *
      * @param listener
      */
     public void setReceiveListener(Consumer<String> listener) {
@@ -117,10 +118,10 @@ public class SocketClient {
             try {
                 String message = reader.readLine();
                 Platform.runLater(() -> {
-                if (listener != null)
-                    listener.accept(message);
+                    if (listener != null)
+                        listener.accept(message);
                 });
-            }catch (IOException e) {
+            } catch (IOException e) {
                 setConnected(false);
                 return;
             }
@@ -129,10 +130,18 @@ public class SocketClient {
 
     public void close() {
         try {
-            if( socket != null)
-            socket.close();
+            if (socket != null)
+                socket.close();
+            setConnected(false);
+            socket = null;
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void shutDown() {
+        //ToDo: should we wait for queued sendMessage before closing down?
+        close();
+        threadPool.shutdown();
     }
 }

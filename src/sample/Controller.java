@@ -31,7 +31,7 @@ public class Controller {
 
     Model model;
     UnDoRedoShapes unDoRedo;
-    SocketClient socketClient = new SocketClient();
+    SocketClient socketClient;
 
     Stage stage;
 
@@ -47,6 +47,7 @@ public class Controller {
 
         // model = new Model();
         unDoRedo = new UnDoRedoShapes(model.getShapes());
+        socketClient = new SocketClient();
 
         //Call draw on canvas when width or height changes
         canvas.widthProperty().addListener(observable -> drawShapes());
@@ -207,5 +208,9 @@ public class Controller {
                 "1 - Circle, 2 - Rectangle, 3 - Triangle\n" +
                 "Ctrl - Border, Alt - Increase size, Shift - Change color", 10, 10);
         gc.fillText("Type: " + model.getShapeType(), 10, canvas.getHeight() - 10);
+    }
+
+    public void shutDown() {
+        socketClient.shutDown();
     }
 }

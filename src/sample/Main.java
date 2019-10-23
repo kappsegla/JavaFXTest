@@ -41,9 +41,8 @@ public class Main extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        //We have to shutdown our network connections and threadpool before JVM can close down.
-        controller.socketClient.close();
-        controller.socketClient.threadPool.shutdown();
+        //We have to shutdown our network connections and thread pool before JVM can close down.
+        controller.shutDown();
     }
 
     public static void main(String[] args) {
