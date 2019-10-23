@@ -42,8 +42,7 @@ public class Circle extends Shape {
     }
 
     @Override
-    public Shape deepCopy() {
-        Color color;
-        return new Circle(getXpos(),getYpos(),getRadius(), getPaint());
+    public String toSvg() {
+        return "<circle cx=\"" + getXpos() + "\" cy=\"" + getYpos() + "\" r=\"" + getRadius() + "\"/>";
     }
 }

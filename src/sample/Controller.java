@@ -7,15 +7,17 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.*;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sample.client.SocketClient;
+import sample.dialogs.Dialogs;
 import sample.operations.UnDoRedoShapes;
 import sample.shapes.*;
 import sample.shapes.decorators.ResizeDecorator;
 import sample.shapes.decorators.RotateDecorator;
 import sample.shapes.decorators.StrokeDecorator;
 
-import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Optional;
 
 import static sample.shapes.ShapeType.*;
@@ -28,7 +30,8 @@ public class Controller {
 
     Model model;
     UnDoRedoShapes unDoRedo;
-    File path;
+    SocketClient socketClient = new SocketClient();
+
     Stage stage;
 
     public Controller(Model model) {
@@ -63,6 +66,7 @@ public class Controller {
                     final KeyCombination ctrlShiftZ = new KeyCodeCombination(KeyCode.Z,
                             KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
                     final KeyCombination ctrlS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+                    final KeyCombination keyC = new KeyCodeCombination(KeyCode.C);
 
                     public void handle(KeyEvent ke) {
                         if (ctrlZ.match(ke)) {
@@ -82,6 +86,8 @@ public class Controller {
                         } else if (ke.getCode().getCode() == '3') {
                             model.setMode(TRIANGLE);
                             drawShapes();
+                        } else if (keyC.match(ke)) {
+                            enableNetwork();
                         }
 //                        //Switch expressions
 //                        switch (ke.getCode().getCode()) {
@@ -94,29 +100,25 @@ public class Controller {
                 });
     }
 
+    private void enableNetwork() {
+        var host = Dialogs.showHostNamePortDialog(stage);
+        host.ifPresent(hostPort -> {
+            socketClient.connect(hostPort.getKey(), hostPort.getValue());
+            socketClient.setReceiveListener(System.out::println);
+        });
+    }
+
     public void saveToFile() {
-        if (path == null)
-            path = showFileDialog();
+        Dialogs.showSaveAsFileDialog(stage).ifPresent(path -> {
+            try (FileWriter fileWriter = new FileWriter(path)) {
+                for (Drawable shape : model.getShapes()) {
+                    fileWriter.write(shape.toSvg());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
-
-    private File showFileDialog() {
-        //Show a file dialog that returns a selected file for opening or null if no file was selected.
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save as");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("SVG (*.svg)", "*.svg"));
-
-        File path = fileChooser.showSaveDialog(stage);
-
-        //Path can be null if abort was selected
-        if (path != null) {
-            //We have a valid File object. Use with FileReader or FileWriter
-            return path;
-        }
-            //No file selected11
-        return null;
-    }
-
 
     //Changed listener method for shapes list
     public void onListOfDrawablesChanged(ListChangeListener.Change<? extends Drawable> c) {
@@ -140,7 +142,6 @@ public class Controller {
         }
         System.out.println(model.getShapes().size());
         drawShapes();
-
     }
 
     public void canvasOnMouseClicked(MouseEvent event) {
@@ -168,9 +169,16 @@ public class Controller {
             else if (event.isAltDown())
                 unDoRedo.insertInUnDoRedoForInsert(new ResizeDecorator(ShapeFactory.createShape(new ShapeProperties(model.getShapeType(), x, y, Color.RED)), 2.0, 2.0));
             else {
-                unDoRedo.insertInUnDoRedoForInsert(ShapeFactory.createShape(new ShapeProperties(model.getShapeType(), x, y, Color.RED)));
+                Shape shape = ShapeFactory.createShape(new ShapeProperties(model.getShapeType(), x, y, Color.RED));
+                unDoRedo.insertInUnDoRedoForInsert(shape);
+                sendToServer(shape);
             }
         }
+    }
+
+    private void sendToServer(Shape shape) {
+        if (socketClient.isConnected())
+            socketClient.sendMessage(shape.toSvg());
     }
 
     private Color getRandomColor() {
@@ -179,7 +187,6 @@ public class Controller {
         int b = (int) (Math.random() * 256);
         return Color.rgb(r, g, b);
     }
-
 
     public void drawShapes() {
         GraphicsContext gc = canvas.getGraphicsContext2D();

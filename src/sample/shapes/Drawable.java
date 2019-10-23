@@ -27,4 +27,6 @@ public interface Drawable {
     void setPaint(Paint paint);
 
     boolean intersects(double x, double y);
+
+    String toSvg();
 }

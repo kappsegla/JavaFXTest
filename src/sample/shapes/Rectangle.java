@@ -54,7 +54,10 @@ public class Rectangle extends Shape {
     }
 
     @Override
-    public Shape deepCopy() {
-        return new Rectangle(getXpos(),getYpos(),getWidth(),getHeight(),getPaint());
+    public String toSvg() {
+        double hWidth = getWidth() / 2.0;
+        double hHeight = getHeight() / 2.0;
+        return "<rect x=\"" + (getXpos() - hWidth) + "\" y=\"" + (getYpos() - hHeight) + "\" width=\"" +
+                getWidth() + "\" height=\"" + getHeight() + "\"/>";
     }
 }

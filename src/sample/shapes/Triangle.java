@@ -38,7 +38,7 @@ public class Triangle extends Shape {
         var p1y = yPoints[2];
         var p2x = xPoints[1];
         var p2y = yPoints[1];
-
+        //ToDo: calculate Area only when points changes
         var Area = 0.5 *(-p1y*p2x + p0y*(-p1x + p2x) + p0x*(p1y - p2y) + p1x*p2y);
         var s = 1/(2*Area)*(p0y*p2x - p0x*p2y + (p2y - p0y)*x + (p0x - p2x)*y);
         var t = 1/(2*Area)*(p0x*p1y - p0y*p1x + (p0y - p1y)*x + (p1x - p0x)*y);
@@ -47,7 +47,8 @@ public class Triangle extends Shape {
         return false;
     }
 
-    private void triangleIntersects(){
-
+    @Override
+    public String toSvg() {
+        return "";
     }
 }

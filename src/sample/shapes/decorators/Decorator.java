@@ -71,4 +71,9 @@ public abstract class Decorator implements Drawable {
     public boolean intersects(double x, double y) {
         return drawable.intersects(x,y);
     }
+
+    @Override
+    public String toSvg() {
+        return drawable.toSvg();
+    }
 }
