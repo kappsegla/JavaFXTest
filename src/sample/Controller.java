@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import sample.client.SocketClient;
 import sample.dialogs.Dialogs;
 import sample.operations.UnDoRedoShapes;
+import sample.parsers.SVGParser;
 import sample.shapes.*;
 import sample.shapes.decorators.ResizeDecorator;
 import sample.shapes.decorators.RotateDecorator;
@@ -105,8 +106,11 @@ public class Controller {
     private void enableNetwork() {
         var host = Dialogs.showHostNamePortDialog(stage);
         host.ifPresent(hostPort -> {
+            SVGParser parser = new SVGParser();
             socketClient.connect(hostPort.getKey(), hostPort.getValue());
-            socketClient.setReceiveListener(System.out::println);
+            socketClient.setReceiveListener(message ->
+                    parser.elementToShape(message).ifPresent(shape ->
+                            model.getShapes().add(shape)));
         });
     }
 
@@ -114,7 +118,7 @@ public class Controller {
         Dialogs.showSaveAsFileDialog(stage).ifPresent(path -> {
             try (FileWriter fileWriter = new FileWriter(path)) {
                 fileWriter.write("<?xml version=\"1.0\" standalone=\"no\"?>\n" +
-                        "<svg width=\""+canvas.getWidth()+"\" height=\""+canvas.getHeight()+"\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n");
+                        "<svg width=\"" + canvas.getWidth() + "\" height=\"" + canvas.getHeight() + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n");
                 for (Drawable shape : model.getShapes()) {
                     fileWriter.write(shape.toSvg());
                 }

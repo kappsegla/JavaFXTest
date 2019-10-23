@@ -34,16 +34,21 @@ public class Triangle extends Shape {
         var p2x = xPoints[1];
         var p2y = yPoints[1];
         //ToDo: calculate Area only when points changes
-        var Area = 0.5 *(-p1y*p2x + p0y*(-p1x + p2x) + p0x*(p1y - p2y) + p1x*p2y);
-        var s = 1/(2*Area)*(p0y*p2x - p0x*p2y + (p2y - p0y)*x + (p0x - p2x)*y);
-        var t = 1/(2*Area)*(p0x*p1y - p0y*p1x + (p0y - p1y)*x + (p1x - p0x)*y);
-        if( s > 0 && t > 0 && 1-s-t > 0)
+        var Area = 0.5 * (-p1y * p2x + p0y * (-p1x + p2x) + p0x * (p1y - p2y) + p1x * p2y);
+        var s = 1 / (2 * Area) * (p0y * p2x - p0x * p2y + (p2y - p0y) * x + (p0x - p2x) * y);
+        var t = 1 / (2 * Area) * (p0x * p1y - p0y * p1x + (p0y - p1y) * x + (p1x - p0x) * y);
+        if (s > 0 && t > 0 && 1 - s - t > 0)
             return true;
         return false;
     }
 
     @Override
     public String toSvg() {
-        return "";
+
+        return " <polygon points=\""
+                + xPoints[0] + "," + yPoints[0] + ","
+                + xPoints[1] + "," + yPoints[1] + ","
+                + xPoints[2] + "," + yPoints[2] + ","
+                + "\" style=\"fill:lime;stroke:purple;stroke-width:1\"/>";
     }
 }
