@@ -7,12 +7,15 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.*;
 import javafx.scene.paint.Color;
-import sample.operations.UnDoRedo;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import sample.operations.UnDoRedoShapes;
 import sample.shapes.*;
 import sample.shapes.decorators.ResizeDecorator;
 import sample.shapes.decorators.RotateDecorator;
 import sample.shapes.decorators.StrokeDecorator;
 
+import java.io.File;
 import java.util.Optional;
 
 import static sample.shapes.ShapeType.*;
@@ -24,16 +27,22 @@ public class Controller {
     double x, y;
 
     Model model;
-    UnDoRedo unDoRedo;
+    UnDoRedoShapes unDoRedo;
+    File path;
+    Stage stage;
 
     public Controller(Model model) {
         this.model = model;
     }
 
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
     public void initialize() {
 
-       // model = new Model();
-        unDoRedo = new UnDoRedo(model.getShapes());
+        // model = new Model();
+        unDoRedo = new UnDoRedoShapes(model.getShapes());
 
         //Call draw on canvas when width or height changes
         canvas.widthProperty().addListener(observable -> drawShapes());
@@ -53,6 +62,7 @@ public class Controller {
                             KeyCombination.CONTROL_DOWN);
                     final KeyCombination ctrlShiftZ = new KeyCodeCombination(KeyCode.Z,
                             KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
+                    final KeyCombination ctrlS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
 
                     public void handle(KeyEvent ke) {
                         if (ctrlZ.match(ke)) {
@@ -61,8 +71,9 @@ public class Controller {
                         } else if (ctrlShiftZ.match(ke)) {
                             unDoRedo.redo(1);
                             ke.consume();
-                        }
-                         else if (ke.getCode().getCode() == '1') {
+                        } else if (ctrlS.match(ke)) {
+                            saveToFile();
+                        } else if (ke.getCode().getCode() == '1') {
                             model.setMode(CIRCLE);
                             drawShapes();
                         } else if (ke.getCode().getCode() == '2') {
@@ -82,6 +93,30 @@ public class Controller {
                     }
                 });
     }
+
+    public void saveToFile() {
+        if (path == null)
+            path = showFileDialog();
+    }
+
+    private File showFileDialog() {
+        //Show a file dialog that returns a selected file for opening or null if no file was selected.
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save as");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("SVG (*.svg)", "*.svg"));
+
+        File path = fileChooser.showSaveDialog(stage);
+
+        //Path can be null if abort was selected
+        if (path != null) {
+            //We have a valid File object. Use with FileReader or FileWriter
+            return path;
+        }
+            //No file selected11
+        return null;
+    }
+
 
     //Changed listener method for shapes list
     public void onListOfDrawablesChanged(ListChangeListener.Change<? extends Drawable> c) {
@@ -120,7 +155,7 @@ public class Controller {
                     //unDoRedo.insertInUnDoRedoForAddDecorator(new StrokeDecorator(shape.get(), Color.BLACK, 5.0));
                     unDoRedo.insertInUnDoRedoForAddDecorator(new RotateDecorator(shape.get(), 10.0));
                 } else if (event.isAltDown()) {
-                    unDoRedo.insertInUnDoRedoForAddDecorator(new ResizeDecorator(shape.get(), 2.0, 2.0));
+                    unDoRedo.insertInUnDoRedoForAddDecorator(new ResizeDecorator(shape.get(), 0.5, 0.5));
                 } else if (event.isShiftDown()) {
                     unDoRedo.insertInUnDoRedoChangeColor(shape.get(), getRandomColor());
                 }

@@ -5,10 +5,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Callback;
 import sample.shapes.Drawable;
-import sample.shapes.Shape;
 import sample.shapes.ShapeType;
 
-import java.util.List;
 import java.util.Optional;
 
 public class Model {
@@ -40,6 +38,7 @@ public class Model {
 
     public Optional<Drawable> findIntersection(double x, double y) {
         //https://stackoverflow.com/questions/21426843/get-last-element-of-stream-list-in-a-one-liner
+
         return shapes.stream().filter(s -> s.intersects(x,y)).reduce((first, second) -> second);
         //return shapes.stream().filter(s -> s.intersects(x,y)).findFirst();
     }

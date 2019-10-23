@@ -1,6 +1,7 @@
 package sample.shapes;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 public class Circle extends Shape {
@@ -38,5 +39,11 @@ public class Circle extends Shape {
         if ((x2 * x2 + y2 * y2) < r * r)
             return true;
         return false;
+    }
+
+    @Override
+    public Shape deepCopy() {
+        Color color;
+        return new Circle(getXpos(),getYpos(),getRadius(), getPaint());
     }
 }

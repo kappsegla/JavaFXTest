@@ -52,4 +52,9 @@ public class Rectangle extends Shape {
             return true;
         return false;
     }
+
+    @Override
+    public Shape deepCopy() {
+        return new Rectangle(getXpos(),getYpos(),getWidth(),getHeight(),getPaint());
+    }
 }

@@ -65,4 +65,6 @@ public abstract class Shape implements Drawable {
         this.paint.set(paint);
     }
 
+    public abstract Shape deepCopy();
+
 }
